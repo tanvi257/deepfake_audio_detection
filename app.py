@@ -288,8 +288,10 @@ with col2:
                         st.markdown("#### 🔄 Class Probabilities")
                         # Show probabilities in dataframe
                         prob_df = pd.DataFrame(results)
-                        prob_df.columns = ["Class Label", "Probability"]
-                        prob_df["Class Label"] = prob_df["Class Label"].apply(lambda x: "Genuine (Human)" if "real" in x.lower() else "Deepfake (AI-Generated)")
+                        prob_df = prob_df.rename(columns={"label": "Class Label", "score": "Probability"})
+                        prob_df["Class Label"] = prob_df["Class Label"].apply(
+                            lambda x: "Genuine (Human)" if "real" in str(x).lower() or "bonafide" in str(x).lower() else "Deepfake (AI-Generated)"
+                        )
                         st.dataframe(prob_df, hide_index=True, use_container_width=True)
                         
                     except Exception as e:
