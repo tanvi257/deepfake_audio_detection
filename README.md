@@ -1,5 +1,7 @@
 # VoiceShield - Deepfake Audio Detection System
 
+[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://deepfakeaudiodetection-59avxappwjmyxbaqnmeujrk.streamlit.app/)
+
 VoiceShield is an artificial intelligence-based audio forensics and anti-spoofing system capable of classifying speech recordings as either **Genuine (Human)** or **Deepfake (AI-Generated)**. 
 
 The repository features a dual-engine architecture, incorporating a lightweight custom-trained Multi-Layer Perceptron (MLP) classifier using spectral features (MFCCs) and a state-of-the-art transformer foundation model (WavLM) for premium classification.
