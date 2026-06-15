@@ -1,0 +1,11 @@
+torch
+transformers
+librosa
+soundfile
+scikit-learn
+scipy
+streamlit
+matplotlib
+numpy
+pandas
+ipykernel
