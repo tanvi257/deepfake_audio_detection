@@ -55,15 +55,15 @@ st.markdown("""
         text-align: center;
     }
     
-    /* Glassmorphism Card */
-    .glass-card {
-        background: rgba(30, 41, 59, 0.45);
-        backdrop-filter: blur(16px);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 16px;
-        padding: 24px;
-        margin-bottom: 24px;
-        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+    /* Glassmorphism Card applied to Streamlit Bordered Containers */
+    div[data-testid="stElementBorderContainer"] {
+        background: rgba(30, 41, 59, 0.45) !important;
+        backdrop-filter: blur(16px) !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        border-radius: 16px !important;
+        padding: 24px !important;
+        margin-bottom: 24px !important;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2) !important;
     }
     
     /* Results Styling */
@@ -161,32 +161,31 @@ def predict_custom(file_path):
 col1, col2 = st.columns([1, 1], gap="large")
 
 with col1:
-    st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-    st.markdown("### 🛠️ Input Control Panel")
-    
-    # Model selection
-    model_choice = st.radio(
-        "Select Classification Engine:",
-        ["Lightweight Feature-Based MLP (Local)", "Deep-Learning Foundation Model (HF WavLM)"],
-        help="WavLM runs on pre-trained transformers weights, ideal for real voices. MLP classifier is trained on spectral attributes."
-    )
-    
-    st.markdown("---")
-    
-    # File Uploader
-    uploaded_file = st.file_uploader(
-        "Upload speech recording (.wav, .mp3, .flac)",
-        type=["wav", "mp3", "flac"]
-    )
-    
-    st.markdown("<h5 style='text-align: center; color: #64748b;'>-- OR --</h5>", unsafe_allow_html=True)
-    
-    # Select pre-generated samples
-    sample_choice = st.selectbox(
-        "Test with simulated audio samples:",
-        ["-- Select a Sample --", "Genuine voice sample 1", "Genuine voice sample 2", "AI Deepfake sample 1", "AI Deepfake sample 2"]
-    )
-    st.markdown('</div>', unsafe_allow_html=True)
+    with st.container(border=True):
+        st.markdown("### 🛠️ Input Control Panel")
+        
+        # Model selection
+        model_choice = st.radio(
+            "Select Classification Engine:",
+            ["Lightweight Feature-Based MLP (Local)", "Deep-Learning Foundation Model (HF WavLM)"],
+            help="WavLM runs on pre-trained transformers weights, ideal for real voices. MLP classifier is trained on spectral attributes."
+        )
+        
+        st.markdown("---")
+        
+        # File Uploader
+        uploaded_file = st.file_uploader(
+            "Upload speech recording (.wav, .mp3, .flac)",
+            type=["wav", "mp3", "flac"]
+        )
+        
+        st.markdown("<h5 style='text-align: center; color: #64748b;'>-- OR --</h5>", unsafe_allow_html=True)
+        
+        # Select pre-generated samples
+        sample_choice = st.selectbox(
+            "Test with simulated audio samples:",
+            ["-- Select a Sample --", "Genuine voice sample 1", "Genuine voice sample 2", "AI Deepfake sample 1", "AI Deepfake sample 2"]
+        )
 
 # Run classification trigger
 run_classification = False
@@ -203,12 +202,11 @@ if uploaded_file is not None:
     
     # Play Audio
     with col1:
-        st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-        st.markdown("#### 🎧 Play Uploaded Audio")
-        st.audio(uploaded_file)
-        if st.button("Run Shield Analysis"):
-            run_classification = True
-        st.markdown('</div>', unsafe_allow_html=True)
+        with st.container(border=True):
+            st.markdown("#### 🎧 Play Uploaded Audio")
+            st.audio(uploaded_file)
+            if st.button("Run Shield Analysis"):
+                run_classification = True
 
 elif sample_choice != "-- Select a Sample --":
     sample_mapping = {
@@ -221,91 +219,89 @@ elif sample_choice != "-- Select a Sample --":
     
     # Play Audio
     with col1:
-        st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-        st.markdown("#### 🎧 Play Simulated Sample")
-        st.audio(audio_file_path)
-        if st.button("Run Sample Analysis"):
-            run_classification = True
-        st.markdown('</div>', unsafe_allow_html=True)
+        with st.container(border=True):
+            st.markdown("#### 🎧 Play Simulated Sample")
+            st.audio(audio_file_path)
+            if st.button("Run Sample Analysis"):
+                run_classification = True
 
 # Output results section
 with col2:
-    st.markdown('<div class="glass-card" style="min-height: 480px;">', unsafe_allow_html=True)
-    st.markdown("### 📊 Shield Diagnostics Output")
-    
-    if run_classification and audio_file_path:
-        with st.spinner("Analyzing spectral dynamics..."):
-            if "MLP" in model_choice:
-                # Custom MLP Model inference
-                res = predict_custom(audio_file_path)
-                if res:
-                    label, confidence, features = res
-                    
-                    # Display Badge
-                    if "Genuine" in label:
-                        st.markdown(f'<div class="result-badge badge-genuine">🛡️ {label}</div>', unsafe_allow_html=True)
-                    else:
-                        st.markdown(f'<div class="result-badge badge-fake">⚠️ {label}</div>', unsafe_allow_html=True)
+    with st.container(border=True):
+        st.markdown("### 📊 Shield Diagnostics Output")
+        
+        if run_classification and audio_file_path:
+            with st.spinner("Analyzing spectral dynamics..."):
+                if "MLP" in model_choice:
+                    # Custom MLP Model inference
+                    res = predict_custom(audio_file_path)
+                    if res:
+                        label, confidence, features = res
                         
-                    st.markdown(f"#### Classification Confidence: **{confidence*100:.2f}%**")
-                    st.progress(confidence)
-                    
-                    st.markdown("---")
-                    st.markdown("#### 📉 Audio Spectral Features")
-                    # Plot MFCC values
-                    mfcc_vals = features[:20]
-                    fig, ax = plt.subplots(figsize=(6, 2.5), facecolor='none')
-                    ax.set_facecolor('none')
-                    ax.bar(range(1, 21), mfcc_vals, color='#6366f1', edgecolor='none')
-                    ax.set_xlabel('MFCC Coefficients', color='#94a3b8', fontsize=8)
-                    ax.set_ylabel('Mean Amplitude', color='#94a3b8', fontsize=8)
-                    ax.tick_params(colors='#94a3b8', labelsize=7)
-                    ax.grid(color=(1.0, 1.0, 1.0, 0.05), linestyle='--')
-                    fig.patch.set_alpha(0.0)
-                    st.pyplot(fig)
+                        # Display Badge
+                        if "Genuine" in label:
+                            st.markdown(f'<div class="result-badge badge-genuine">🛡️ {label}</div>', unsafe_allow_html=True)
+                        else:
+                            st.markdown(f'<div class="result-badge badge-fake">⚠️ {label}</div>', unsafe_allow_html=True)
+                            
+                        st.markdown(f"#### Classification Confidence: **{confidence*100:.2f}%**")
+                        st.progress(confidence)
+                        
+                        st.markdown("---")
+                        st.markdown("#### 📉 Audio Spectral Features")
+                        # Plot MFCC values
+                        mfcc_vals = features[:20]
+                        fig, ax = plt.subplots(figsize=(6, 2.5), facecolor='none')
+                        ax.set_facecolor('none')
+                        ax.bar(range(1, 21), mfcc_vals, color='#6366f1', edgecolor='none')
+                        ax.set_xlabel('MFCC Coefficients', color='#94a3b8', fontsize=8)
+                        ax.set_ylabel('Mean Amplitude', color='#94a3b8', fontsize=8)
+                        ax.tick_params(colors='#94a3b8', labelsize=7)
+                        ax.grid(color=(1.0, 1.0, 1.0, 0.05), linestyle='--')
+                        fig.patch.set_alpha(0.0)
+                        st.pyplot(fig)
+                    else:
+                        st.error("Audio processing failed. Please ensure the file is a valid 16kHz audio recording.")
+                        
                 else:
-                    st.error("Audio processing failed. Please ensure the file is a valid 16kHz audio recording.")
-                    
-            else:
-                # Foundation Hugging Face WavLM model inference
-                try:
-                    classifier = load_hf_model()
-                    results = classifier(audio_file_path)
-                    
-                    # Parse labels
-                    top_result = results[0]
-                    score = top_result['score']
-                    hf_label = top_result['label'].lower()
-                    
-                    label = "Genuine (Human)" if 'real' in hf_label or 'bonafide' in hf_label else "Deepfake (AI-Generated)"
-                    
-                    if "Genuine" in label:
-                        st.markdown(f'<div class="result-badge badge-genuine">🛡️ {label}</div>', unsafe_allow_html=True)
-                    else:
-                        st.markdown(f'<div class="result-badge badge-fake">⚠️ {label}</div>', unsafe_allow_html=True)
+                    # Foundation Hugging Face WavLM model inference
+                    try:
+                        classifier = load_hf_model()
+                        results = classifier(audio_file_path)
                         
-                    st.markdown(f"#### Classification Confidence: **{score*100:.2f}%**")
-                    st.progress(score)
-                    
-                    st.markdown("---")
-                    st.markdown("#### 🔄 Class Probabilities")
-                    # Show probabilities in dataframe
-                    prob_df = pd.DataFrame(results)
-                    prob_df.columns = ["Class Label", "Probability"]
-                    prob_df["Class Label"] = prob_df["Class Label"].apply(lambda x: "Genuine (Human)" if "real" in x.lower() else "Deepfake (AI-Generated)")
-                    st.dataframe(prob_df, hide_index=True, use_container_width=True)
-                    
-                except Exception as e:
-                    st.error(f"Failed to load foundation model: {e}")
-                    st.info("Check internet connectivity. You can fall back to the local MLP classifier.")
-    else:
-        st.markdown(
-            "<div style='text-align: center; padding-top: 100px; color: #64748b;'>"
-            "🚀 Upload an audio file or select a simulated sample and click 'Run Analysis' to show diagnostics."
-            "</div>",
-            unsafe_allow_html=True
-        )
-    st.markdown('</div>', unsafe_allow_html=True)
+                        # Parse labels
+                        top_result = results[0]
+                        score = top_result['score']
+                        hf_label = top_result['label'].lower()
+                        
+                        label = "Genuine (Human)" if 'real' in hf_label or 'bonafide' in hf_label else "Deepfake (AI-Generated)"
+                        
+                        if "Genuine" in label:
+                            st.markdown(f'<div class="result-badge badge-genuine">🛡️ {label}</div>', unsafe_allow_html=True)
+                        else:
+                            st.markdown(f'<div class="result-badge badge-fake">⚠️ {label}</div>', unsafe_allow_html=True)
+                            
+                        st.markdown(f"#### Classification Confidence: **{score*100:.2f}%**")
+                        st.progress(score)
+                        
+                        st.markdown("---")
+                        st.markdown("#### 🔄 Class Probabilities")
+                        # Show probabilities in dataframe
+                        prob_df = pd.DataFrame(results)
+                        prob_df.columns = ["Class Label", "Probability"]
+                        prob_df["Class Label"] = prob_df["Class Label"].apply(lambda x: "Genuine (Human)" if "real" in x.lower() else "Deepfake (AI-Generated)")
+                        st.dataframe(prob_df, hide_index=True, use_container_width=True)
+                        
+                    except Exception as e:
+                        st.error(f"Failed to load foundation model: {e}")
+                        st.info("Check internet connectivity. You can fall back to the local MLP classifier.")
+        else:
+            st.markdown(
+                "<div style='text-align: center; padding-top: 100px; color: #64748b;'>"
+                "🚀 Upload an audio file or select a simulated sample and click 'Run Analysis' to show diagnostics."
+                "</div>",
+                unsafe_allow_html=True
+            )
 
 # Footer
 st.markdown(
