@@ -8,7 +8,7 @@ The repository features a dual-engine architecture, incorporating a lightweight 
 
 ---
 
-## 🚀 Key Features
+## Key Features
 
 * **Double Backend Architecture**:
   * **Local MLP Model**: Optimized for low latency, trained on extracted MFCCs and spectral dynamics.
@@ -19,7 +19,7 @@ The repository features a dual-engine architecture, incorporating a lightweight 
 
 ---
 
-## 🛠️ Processing Pipeline
+## Processing Pipeline
 
 The voice signal undergoes the following pipeline during evaluation:
 
@@ -53,7 +53,7 @@ The voice signal undergoes the following pipeline during evaluation:
 
 ---
 
-## 📦 Installation & Setup
+## Installation & Setup
 
 1. **Clone or navigate to the project workspace**:
    ```bash
@@ -68,7 +68,7 @@ The voice signal undergoes the following pipeline during evaluation:
 
 ---
 
-## 🚦 How to Run
+##  How to Run
 
 ### 1. Train the Classifier
 To train the local MLP model and generate mock testing WAV files:
@@ -98,7 +98,7 @@ Open the URL shown in your terminal (usually `http://localhost:8501`). You can u
 
 ---
 
-## 📊 Verification Baseline
+## Verification Baseline
 
 Evaluated on the test split, the MLP model meets the criteria:
 
@@ -110,7 +110,7 @@ Evaluated on the test split, the MLP model meets the criteria:
 
 ---
 
-## 📁 Repository Structure
+## Repository Structure
 
 ```
 deepfake_audio_detection/
