@@ -90,7 +90,7 @@ python test.py --audio data/simulated/deepfake_sample_1.wav --model foundation
 ### 3. Launch the Streamlit Web App
 To run the interactive web interface:
 ```bash
-streamlit run app.py
+python -m streamlit run app.py
 ```
 Open the URL shown in your terminal (usually `http://localhost:8501`). You can upload your own speech recordings or select one of our pre-generated simulated samples from the dropdown.
 
