@@ -260,7 +260,7 @@ with col2:
                     ax.set_xlabel('MFCC Coefficients', color='#94a3b8', fontsize=8)
                     ax.set_ylabel('Mean Amplitude', color='#94a3b8', fontsize=8)
                     ax.tick_params(colors='#94a3b8', labelsize=7)
-                    ax.grid(color='rgba(255,255,255,0.05)', linestyle='--')
+                    ax.grid(color=(1.0, 1.0, 1.0, 0.05), linestyle='--')
                     fig.patch.set_alpha(0.0)
                     st.pyplot(fig)
                 else:
