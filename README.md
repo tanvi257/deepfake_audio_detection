@@ -1,4 +1,4 @@
-# VoiceShield   Deepfake Audio Detection System
+# VoiceShield -  Deepfake Audio Detection System
 
 [![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://deepfakeaudiodetection-59avxappwjmyxbaqnmeujrk.streamlit.app/)
 
